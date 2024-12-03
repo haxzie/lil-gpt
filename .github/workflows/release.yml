@@ -45,8 +45,8 @@ jobs:
       - name: Build Lil GPT App
         env:
           # Required for macOS builds
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          # APPLE_ID: ${{ secrets.APPLE_ID }}
+          # APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
           RUSTFLAGS: "-C target-cpu=native"
         run: pnpm tauri build
       
@@ -54,7 +54,8 @@ jobs:
       - name: Prepare .app Artifact
         run: |
           cd src-tauri/target/release/bundle/macos
-          cp -R *.app $GITHUB_WORKSPACE/lil-gpt.app
+          zip -r lil-gpt.app.zip *.app
+          mv lil-gpt.app.zip $GITHUB_WORKSPACE/
 
       # Prepare the .dmg artifact
       - name: Prepare .dmg Artifact
@@ -85,13 +86,13 @@ jobs:
           asset_name: lil-gpt.dmg
           asset_content_type: application/x-apple-diskimage
       
-      # Upload the .app artifact to the release
-      - name: Upload .app Release Asset
+      # Upload the .app.zip artifact to the release
+      - name: Upload .app.zip Release Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: lil-gpt.app
-          asset_name: lil-gpt.app
-          asset_content_type: application/octet-stream
+          asset_path: lil-gpt.app.zip
+          asset_name: lil-gpt.app.zip
+          asset_content_type: application/zip
