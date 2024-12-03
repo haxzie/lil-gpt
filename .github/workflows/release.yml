@@ -21,20 +21,17 @@ jobs:
           toolchain: stable
           profile: minimal
 
-      # Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      # node
+      - name: install pnpm
+        uses: pnpm/action-setup@v4
         with:
-          node-version: '20' # Use the latest Node.js version compatible with pnpm
+          version: 9.x.x
 
-      # Install pnpm and configure environment
-      - name: Install and Configure pnpm
-        run: |
-          npm install -g pnpm
-          pnpm setup
-          echo "export PNPM_HOME=$HOME/.local/share/pnpm" >> $GITHUB_ENV
-          echo "export PATH=\$PNPM_HOME/bin:\$PATH" >> $GITHUB_ENV
-          source ~/.bashrc
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
 
       # Install dependencies
       - name: Install Dependencies
