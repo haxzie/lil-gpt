@@ -3,7 +3,7 @@ name: Build and Release Lil GPT App (macOS)
 on:
   push:
     tags:
-      - 'v*' # Trigger only on version tags (e.g., v1.0.0)
+      - "v*" # Trigger only on version tags (e.g., v1.0.0)
 
 jobs:
   build-and-release:
@@ -25,11 +25,14 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20' # Use the version compatible with your app
-      
-       # Install pnpm
+          node-version: "20" # Use the version compatible with your app
+
+      # Install pnpm
       - name: Install pnpm
-        run: npm install -g pnpm
+        run: |
+          npm install -g pnpm
+          pnpm setup
+          echo "export PATH=$(pnpm bin):\$PATH" >> $GITHUB_ENV
 
       # Install dependencies
       - name: Install Dependencies
