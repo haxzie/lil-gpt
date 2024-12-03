@@ -1,0 +1,21 @@
+.chatScreen {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+
+  .chatMessages {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: auto;
+  }
+
+  .chatInputWrapper {
+    display: flex;
+    flex-direction: column;
+    // padding: 0px 10px 10px 10px;
+    width: 100%;
+  }
+}

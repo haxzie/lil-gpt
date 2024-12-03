@@ -1,0 +1,59 @@
+.welcomeView {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 15px;
+    animation: slideUp 0.5s ease;
+
+    .icon {
+        width: 64px;
+        height: 64px;
+        background-color: var(--color-element-background-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-rounded);
+
+        .iconWrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    .texts {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+
+        h2 {
+            font-size: var(--font-size);
+            line-height: var(--line-height);
+            color: var(--color-font);
+            font-weight: var(--font-weight-semibold);
+            text-align: center;
+        }
+
+        p {
+            font-size: var(--font-size-s);
+            line-height: var(--line-height-s);
+            color: var(--color-font-light);
+            text-align: center;
+            max-width: 340px;
+        }
+    }
+
+    @keyframes slideUp {
+        0% {
+            transform: translateY(10px);
+            opacity: 0;
+        }
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+}

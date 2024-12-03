@@ -1,0 +1,11 @@
+.userMessage {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-end;
+  max-width: 80%;
+  background-color: var(--color-element-background-dark);
+  padding: 10px 15px;
+  margin: 0px 10px;
+  border-radius: var(--radius-l) var(--radius-l) 0 var(--radius-l);
+  font-size: var(--font-size-s);
+}

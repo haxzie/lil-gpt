@@ -1,0 +1,64 @@
+.apiKeyForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  
+  .texts {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    h2 {
+      font-size: var(--font-size-s);
+      line-height: var(--line-height-s);
+      font-weight: var(--font-weight-semibold);
+      text-align: center;
+    }
+
+    p {
+      font-size: var(--font-size-s);
+      line-height: var(--line-height-s);
+      color: var(--color-font-light);
+      text-align: center;
+    }
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    input {
+      padding: 10px;
+      color: var(--color-font);
+      height: 48px;
+      background-color: var(--color-element-background);
+      border: 1px solid var(--color-border);
+      font-size: var(--font-size-s);
+      line-height: var(--line-height-s);
+      font-weight: var(--font-weight-semibold);
+      border-radius: var(--radius-m);
+      outline: none;
+
+      &:focus {
+        border: 1px solid var(--color-primary);
+      }
+    }
+
+    button {
+      padding: 10px;
+      color: var(--color-background);
+      height: 48px;
+      background-color: var(--color-font);
+      border: 1px solid var(--color-border);
+      font-size: var(--font-size-s);
+      line-height: var(--line-height-s);
+      font-weight: var(--font-weight-semibold);
+      border-radius: var(--radius-m);
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}

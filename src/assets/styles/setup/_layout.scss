@@ -1,0 +1,21 @@
+html,
+body,
+#app,
+#root,
+#__next {
+  height: 100%;
+  width: 100%;
+  background-color: var(--color-background-light);
+  scroll-behavior: smooth !important;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+}
+
+.hljs {
+  * {
+    font-family: "Fira Code", monospace;
+  }
+}

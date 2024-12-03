@@ -1,0 +1,67 @@
+.topBar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  height: 48px;
+  background-color: transparent;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 3; 
+
+  .header {
+    display: flex;
+    align-items: center;
+
+    .backButton {
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      color: var(--color-font);
+      border-radius: var(--radius-rounded);
+
+      &:hover {
+        cursor: pointer;
+        background-color: var(--color-element-background-light);
+      }
+    }
+
+    h1 {
+      margin-left: 10px;
+      font-size: var(--font-size-s);
+      line-height: var(--line-height-s);
+      font-weight: var(--font-weight-semibold);
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .actionButton {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: var(--color-font);
+    border-radius: var(--radius-rounded);
+
+    &:hover {
+      cursor: pointer;
+      background-color: var(--color-element-background-light);
+    }
+  }
+}
