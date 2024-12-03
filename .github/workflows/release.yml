@@ -26,14 +26,18 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16' # Use the version compatible with your app
+      
+       # Install pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm
 
       # Install dependencies
       - name: Install Dependencies
-        run: npm install
+        run: pnpm install
 
       # Install Tauri CLI
       - name: Install Tauri CLI
-        run: npm install -g @tauri-apps/cli
+        run: pnpm install -g @tauri-apps/cli
 
       # Build the Tauri app
       - name: Build Lil GPT App
@@ -42,7 +46,7 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
           RUSTFLAGS: "-C target-cpu=native"
-        run: npm run tauri build
+        run: pnpm run tauri build
 
       # Prepare the .dmg artifact
       - name: Prepare .dmg Artifact
