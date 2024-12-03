@@ -27,17 +27,13 @@ jobs:
         with:
           node-version: '20' # Use the latest Node.js version compatible with pnpm
 
-      # Install pnpm and set up the environment
+      # Install pnpm and configure environment
       - name: Install and Configure pnpm
         run: |
           npm install -g pnpm
           pnpm setup
-          echo "source ~/.bashrc" >> ~/.bash_profile
-          echo "export PATH=$(pnpm bin):\$PATH" >> $GITHUB_ENV
-        shell: bash
-      
-      - name: Run pnpm setup
-        run: pnpm setup --force
+          echo "export PNPM_HOME=$(pnpm config get store-dir)" >> $GITHUB_ENV
+          echo "export PATH=\$PNPM_HOME/bin:\$PATH" >> $GITHUB_ENV
 
       # Install dependencies
       - name: Install Dependencies
