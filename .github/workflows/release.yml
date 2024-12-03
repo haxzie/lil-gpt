@@ -49,6 +49,12 @@ jobs:
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
           RUSTFLAGS: "-C target-cpu=native"
         run: pnpm tauri build
+      
+      # Prepare the .app artifact
+      - name: Prepare .app Artifact
+        run: |
+          cd src-tauri/target/release/bundle/macos
+          cp -R *.app $GITHUB_WORKSPACE/lil-gpt.app
 
       # Prepare the .dmg artifact
       - name: Prepare .dmg Artifact
@@ -78,3 +84,14 @@ jobs:
           asset_path: lil-gpt.dmg
           asset_name: lil-gpt.dmg
           asset_content_type: application/x-apple-diskimage
+      
+      # Upload the .app artifact to the release
+      - name: Upload .app Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: lil-gpt.app
+          asset_name: lil-gpt.app
+          asset_content_type: application/octet-stream
