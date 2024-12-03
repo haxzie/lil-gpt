@@ -34,6 +34,7 @@ jobs:
           pnpm setup
           echo "export PNPM_HOME=$HOME/.local/share/pnpm" >> $GITHUB_ENV
           echo "export PATH=\$PNPM_HOME/bin:\$PATH" >> $GITHUB_ENV
+          source ~/.bashrc
 
       # Install dependencies
       - name: Install Dependencies
