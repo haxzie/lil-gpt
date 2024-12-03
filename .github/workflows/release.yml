@@ -1,0 +1,74 @@
+name: Build and Release Lil GPT App (macOS)
+
+on:
+  push:
+    tags:
+      - 'v*' # Trigger only on version tags (e.g., v1.0.0)
+
+jobs:
+  build-and-release:
+    runs-on: macos-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Set up Rust
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16' # Use the version compatible with your app
+
+      # Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Install Tauri CLI
+      - name: Install Tauri CLI
+        run: npm install -g @tauri-apps/cli
+
+      # Build the Tauri app
+      - name: Build Lil GPT App
+        env:
+          # Required for macOS builds
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          RUSTFLAGS: "-C target-cpu=native"
+        run: npm run tauri build
+
+      # Prepare the .dmg artifact
+      - name: Prepare .dmg Artifact
+        run: |
+          cd src-tauri/target/release/bundle/dmg
+          mv *.dmg $GITHUB_WORKSPACE/lil-gpt.dmg
+
+      # Create GitHub Release
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: "Release ${{ github.ref_name }}"
+          draft: false
+          prerelease: false
+
+      # Upload the .dmg artifact to the release
+      - name: Upload .dmg Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: lil-gpt.dmg
+          asset_name: lil-gpt.dmg
+          asset_content_type: application/x-apple-diskimage
