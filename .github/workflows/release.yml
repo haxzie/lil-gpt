@@ -37,7 +37,7 @@ jobs:
         shell: bash
       
       - name: Run pnpm setup
-        run: pnpm setup
+        run: pnpm setup --force
 
       # Install dependencies
       - name: Install Dependencies
