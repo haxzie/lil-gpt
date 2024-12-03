@@ -45,8 +45,8 @@ jobs:
       - name: Build Lil GPT App
         env:
           # Required for macOS builds
-          # APPLE_ID: ${{ secrets.APPLE_ID }}
-          # APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
           RUSTFLAGS: "-C target-cpu=native"
         run: pnpm tauri build
       
