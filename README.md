@@ -1,6 +1,10 @@
-# Tauri + React + Typescript
+# Lil GPT - A cute little ChatGPT Client
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+Lil GPT is a tiny OpenAI ChatGPT Client to quickly access Chat Features. 
+
+- [X] The chats are ephemeral and are cleared once you exit the chat screen
+- [X] Supports syntax lighting and markdown support
+- []
 
 ## Recommended IDE Setup
 
