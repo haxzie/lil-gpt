@@ -13,8 +13,31 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-element-background-dark);
+    background-color: var(--color-element-background-light);
+    color: var(--color-font);
     border: 1px solid var(--color-border);
+  }
+
+  .loading {
+    position: relative;
+    overflow: hidden;
+    font-size: var(--font-size-s);
+    line-height: var(--line-height-s);
+    color: var(--color-font-light);
+    padding-top: 5px;
+    animation: shimmer 1s infinite;
+
+    @keyframes shimmer {
+      0% {
+       opacity: 0.5;
+      }
+      25% {
+       opacity: 1;
+      }
+      100% {
+        opacity: 0.5;
+      }
+    }
   }
 
   .content {
@@ -22,7 +45,7 @@
     overflow: hidden;
     font-size: var(--font-size-s);
     line-height: var(--line-height-s);
-    padding-top: 0px;
+    padding-top: 2px;
 
     a {
       color: var(--color-link);

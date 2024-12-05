@@ -7,7 +7,14 @@ export default function AssistantMessage({ content }: { content: string }) {
       <div className={styles.icon}>
         <OpenAIIcon size={18} />
       </div>
-      <div className={styles.content} dangerouslySetInnerHTML={{ __html: content }}></div>
+      {content ? (
+        <div
+          className={styles.content}
+          dangerouslySetInnerHTML={{ __html: content }}
+        ></div>
+      ) : (
+        <p className={styles.loading}>Thinking...</p>
+      )}
     </div>
   );
 }

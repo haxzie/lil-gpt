@@ -1,6 +1,6 @@
 @use "./setup/reset";
 @use "./setup/normalize";
-// @use "./setup/mixins";
+// @use "./setup/mixins"; // will be automatically injected into the filess
 @use "./setup/layout";
 @use "./setup/typography";
 @use "./setup/icons";
