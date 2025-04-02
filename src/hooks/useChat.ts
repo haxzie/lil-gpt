@@ -7,6 +7,7 @@ import { generateSystemPrompt } from "../utils/prompt";
 import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 import hljs from "highlight.js";
+import { OPENAI_AI_MODEL } from "@/utils/constants";
 
 const marked = new Marked(
   markedHighlight({
@@ -48,7 +49,7 @@ export default function useChat() {
 
     // create a text stream
     const { textStream } = streamText({
-      model: ChatGPT("gpt-3.5-turbo"),
+      model: ChatGPT(OPENAI_AI_MODEL),
       messages: [
         {
           role: Role.system,
