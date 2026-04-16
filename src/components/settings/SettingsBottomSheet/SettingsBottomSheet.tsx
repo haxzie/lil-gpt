@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./SettingsBottomSheet.module.scss";
 import ClearIcon from "../../icons/ClearIcon";
 import { motion } from "motion/react";
 import useChatStore from "@/store/Chat.store";
 import { useShallow } from "zustand/react/shallow";
 import { MCPServer } from "@/store/Chat.types";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 
 // ─── Provider Toggle ────────────────────────────────────────────────────────
 
@@ -217,6 +218,12 @@ type Tab = "providers" | "mcp";
 export default function SettingsBottomSheet({ onClose }: { onClose: () => void }) {
   const [activeTab, setActiveTab] = useState<Tab>("providers");
 
+  const handleDragStart = useCallback((e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest("button")) return;
+    e.preventDefault();
+    getCurrentWindow().startDragging();
+  }, []);
+
   const { openaiApiKey, anthropicApiKey, geminiApiKey, saveOpenAIApiKey, saveAnthropicApiKey, saveGeminiApiKey } =
     useChatStore(
       useShallow(
@@ -254,7 +261,7 @@ export default function SettingsBottomSheet({ onClose }: { onClose: () => void }
         transition={{ duration: 0.2 }}
         className={styles.panel}
       >
-        <div className={styles.header}>
+        <div className={styles.header} onMouseDown={handleDragStart}>
           <h2 className={styles.title}>Settings</h2>
           <button className={styles.closeButton} onClick={onClose}>
             <ClearIcon size={20} />
