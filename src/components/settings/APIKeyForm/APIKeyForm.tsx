@@ -8,28 +8,27 @@ export default function APIKeyForm({
 }: {
   onKeyChange?: () => void;
 }) {
-  const { apiKey, saveApiKey } = useChatStore(
-    useShallow(({ apiKey, saveApiKey }) => ({
-      apiKey,
-      saveApiKey,
+  const { openaiApiKey, saveOpenAIApiKey } = useChatStore(
+    useShallow(({ openaiApiKey, saveOpenAIApiKey }) => ({
+      openaiApiKey,
+      saveOpenAIApiKey,
     }))
   );
 
-  const [openAIAPIKey, setOpenAIAPIKey] = useState(apiKey || "");
+  const [inputValue, setInputValue] = useState(openaiApiKey || "");
 
   const handleSaveApiKey = useCallback(
     (e: FormEvent) => {
       e.preventDefault();
-      if (!openAIAPIKey.trim()) return;
-      saveApiKey(openAIAPIKey.trim());
-
-      // Call the onKeyChange callback if it is provided
+      if (!inputValue.trim()) return;
+      saveOpenAIApiKey(inputValue.trim());
       if (onKeyChange) {
         onKeyChange();
       }
     },
-    [openAIAPIKey, saveApiKey]
+    [inputValue, saveOpenAIApiKey]
   );
+
   return (
     <div className={styles.apiKeyForm} data-testid="apiKeyForm">
       <div className={styles.texts}>
@@ -40,15 +39,15 @@ export default function APIKeyForm({
         <input
           data-testid="apiKeyInput"
           type="password"
-          placeholder="**************************************"
+          placeholder="sk-..."
           className={styles.apiKeyInput}
-          value={openAIAPIKey}
-          onChange={(e) => setOpenAIAPIKey(e.target.value)}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
         />
         <button
           data-testid="apiKeySaveButton"
           className={styles.cta}
-          disabled={!openAIAPIKey.trim()}
+          disabled={!inputValue.trim()}
         >
           Save API Key
         </button>

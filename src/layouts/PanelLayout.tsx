@@ -3,13 +3,20 @@ import styles from "./PanelLayout.module.scss";
 import TopBar from "@/components/shared/TopBar";
 import SettingsBottomSheet from "@/components/settings/SettingsBottomSheet/SettingsBottomSheet";
 import { AnimatePresence } from "motion/react";
+import useChatStore from "@/store/Chat.store";
+import { useShallow } from "zustand/react/shallow";
 
-export default function PanelLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [showSettings, setShowSettings] = useState(false);
+export default function PanelLayout({ children }: { children: React.ReactNode }) {
+  const { openaiApiKey, anthropicApiKey, geminiApiKey } = useChatStore(
+    useShallow(({ openaiApiKey, anthropicApiKey, geminiApiKey }) => ({
+      openaiApiKey,
+      anthropicApiKey,
+      geminiApiKey,
+    }))
+  );
+
+  const hasAnyKey = !!(openaiApiKey || anthropicApiKey || geminiApiKey);
+  const [showSettings, setShowSettings] = useState(!hasAnyKey);
 
   const toggleSettings = useCallback(() => {
     setShowSettings((prev) => !prev);

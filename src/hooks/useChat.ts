@@ -1,75 +1,100 @@
+import { useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import useChatStore from "../store/Chat.store";
 import { Role } from "../store/Chat.types";
-import { streamText } from "ai";
-import { createOpenAI } from "@ai-sdk/openai";
 import { generateSystemPrompt } from "../utils/prompt";
-import { Marked } from "marked";
-import { markedHighlight } from "marked-highlight";
-import hljs from "highlight.js";
-import { OPENAI_AI_MODEL } from "@/utils/constants";
+import { ALL_MODELS, SERVER_URL } from "@/utils/constants";
 
-const marked = new Marked(
-  markedHighlight({
-    emptyLangClass: "hljs",
-    langPrefix: "hljs language-",
-    highlight(code, lang) {
-      const language = hljs.getLanguage(lang) ? lang : "plaintext";
-      return hljs.highlight(code, { language }).value;
-    },
-  })
-);
+const STREAM_ERROR_SENTINEL = "\n__STREAM_ERROR__";
 
 export default function useChat() {
-  const { apiKey, addMessage, updateMessage } = useChatStore(
-    useShallow(({ updateMessage, addMessage, apiKey }) => ({
-      apiKey,
-      updateMessage,
-      addMessage,
-    }))
-  );
+  const abortRef = useRef<AbortController | null>(null);
 
-  /**
-   * Sends a message to the assistant
-   * 1. Adds the user message to the store
-   * 2. Streams the assistant response
-   * 3. Updates the assistant message in the store
-   * @param message string
-   */
+  const { selectedModel, addMessage, updateMessage, removeMessage } =
+    useChatStore(
+      useShallow(({ selectedModel, updateMessage, addMessage, removeMessage }) => ({
+        selectedModel,
+        updateMessage,
+        addMessage,
+        removeMessage,
+      }))
+    );
+
+  const stopMessage = () => {
+    abortRef.current?.abort();
+  };
+
   const sendMessage = async (message: string) => {
-    // add the user message to the store
     addMessage(Role.user, message);
 
-    // create an instance of the OpenAI API
-    const ChatGPT = createOpenAI({
-      apiKey,
-    });
-    // generate a system prompt
+    const modelInfo = ALL_MODELS.find((m) => m.id === selectedModel);
+    if (!modelInfo) throw new Error(`Unknown model: ${selectedModel}`);
+
+    // Snapshot messages before adding the assistant placeholder —
+    // Anthropic rejects empty content blocks
+    const conversationMessages = Object.values(useChatStore.getState().messages);
+
+    // Add the assistant message immediately so the loading state shows
+    const assistantMessageId = addMessage(Role.assistant, "", modelInfo.provider);
+
     const systemPrompt = await generateSystemPrompt();
 
-    // create a text stream
-    const { textStream } = streamText({
-      model: ChatGPT(OPENAI_AI_MODEL),
-      messages: [
-        {
-          role: Role.system,
-          content: systemPrompt,
-        },
-        ...Object.values(useChatStore.getState().messages),
-      ],
-    });
+    const abort = new AbortController();
+    abortRef.current = abort;
 
-    // create an assistant message, we will update this message as we stream the response
-    const assistantMessageId = addMessage(Role.assistant, "");
-    const parts = [];
-    for await (const textPart of textStream) {
-      parts.push(textPart);
-      const markedText = await marked.parse(parts.join(""));
-      updateMessage(assistantMessageId, markedText);
+    let response: Response;
+    try {
+      response = await fetch(`${SERVER_URL}/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal: abort.signal,
+        body: JSON.stringify({
+          model: selectedModel,
+          provider: modelInfo.provider,
+          messages: conversationMessages,
+          systemPrompt,
+        }),
+      });
+    } catch (err) {
+      removeMessage(assistantMessageId);
+      if ((err as Error).name === "AbortError") return;
+      throw new Error("Could not reach chat server");
+    }
+
+    if (!response.ok) {
+      removeMessage(assistantMessageId);
+      const body = await response.json().catch(() => ({}));
+      throw new Error(body?.error ?? `Server error ${response.status}`);
+    }
+
+    const reader = response.body!.getReader();
+    const decoder = new TextDecoder();
+    const parts: string[] = [];
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+
+        const sentinelIndex = chunk.indexOf(STREAM_ERROR_SENTINEL);
+        if (sentinelIndex !== -1) {
+          const errorJson = chunk.slice(sentinelIndex + STREAM_ERROR_SENTINEL.length);
+          const { message: errMsg } = JSON.parse(errorJson);
+          removeMessage(assistantMessageId);
+          throw new Error(errMsg);
+        }
+
+        parts.push(chunk);
+        updateMessage(assistantMessageId, parts.join(""));
+      }
+    } catch (err) {
+      if ((err as Error).name === "AbortError") return;
+      removeMessage(assistantMessageId);
+      throw err instanceof Error ? err : new Error(String(err));
     }
   };
 
-  return {
-    sendMessage,
-  };
+  return { sendMessage, stopMessage };
 }

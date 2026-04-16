@@ -1,15 +1,17 @@
 import styles from "./APIKeyInputScreen.module.scss";
-import OpenAIIcon from "../../icons/OpenAIIcon";
-import APIKeyForm from "@/components/settings/APIKeyForm/APIKeyForm";
 import { memo } from "react";
+import SettingsIcon from "@/components/icons/SettingsIcon";
 
 function APIKeyInputScreen() {
   return (
-    <div className={styles.apiKeyInputScreen}  data-testid="apiInputScreen">
+    <div className={styles.apiKeyInputScreen} data-testid="apiInputScreen">
       <div className={styles.icon}>
-        <OpenAIIcon size={34} />
+        <SettingsIcon size={24} />
       </div>
-      <APIKeyForm />
+      <div className={styles.texts}>
+        <h2>Add an API Key to get started</h2>
+        <p>Open Settings to connect OpenAI, Anthropic, or Gemini.</p>
+      </div>
     </div>
   );
 }

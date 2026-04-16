@@ -10,11 +10,10 @@ export default function TopBar({
 }: {
   onClickShowSettings?: () => void;
 }) {
-  const { clearMessages, messages, apiKey } = useChatStore(
-    useShallow(({ messages, clearMessages, apiKey }) => ({
+  const { clearMessages, messages } = useChatStore(
+    useShallow(({ messages, clearMessages }) => ({
       messages,
       clearMessages,
-      apiKey,
     }))
   );
 
@@ -34,13 +33,10 @@ export default function TopBar({
         )}
         <h1 className={styles.title}>Lil-GPT</h1>
       </div>
-      {/* Action buttons  */}
       <div className={styles.actions}>
-        {apiKey && (
-          <button className={styles.actionButton} onClick={handleShowSettings}>
-            <SettingsIcon size={18} />
-          </button>
-        )}
+        <button className={styles.actionButton} onClick={handleShowSettings}>
+          <SettingsIcon size={18} />
+        </button>
       </div>
     </div>
   );

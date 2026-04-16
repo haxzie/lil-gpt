@@ -12,6 +12,22 @@
     overflow: auto;
   }
 
+  .statusBar {
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-xs);
+    color: var(--color-font-light);
+    text-align: center;
+    padding: 6px 12px;
+    border-top: 1px solid var(--color-border);
+    flex-shrink: 0;
+
+    &.statusBarError {
+      color: var(--color-error);
+      background-color: var(--color-error-transparent);
+      border-color: var(--color-error-light);
+    }
+  }
+
   .chatInputWrapper {
     display: flex;
     flex-direction: column;

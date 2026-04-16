@@ -1,0 +1,13 @@
+{
+  "name": "lil-gpt-server",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.58",
+    "@ai-sdk/google": "^3.0.43",
+    "@ai-sdk/openai": "^3.0.41",
+    "ai": "^6.0.116",
+    "drizzle-orm": "^0.45.1",
+    "hono": "^4.7.5"
+  }
+}

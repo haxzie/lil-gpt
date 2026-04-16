@@ -31,6 +31,7 @@ function ChatMessages() {
             key={`message-${message.role}-${index}`}
             role={message.role}
             content={message.content}
+            provider={message.provider}
           />
         ))}
       </AnimatePresence>

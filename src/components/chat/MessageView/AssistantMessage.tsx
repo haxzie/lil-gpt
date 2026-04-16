@@ -1,17 +1,29 @@
-import OpenAIIcon from "@/components/icons/OpenAIIcon";
 import styles from "./AssistantMessage.module.scss";
+import { Streamdown } from "streamdown";
+import OpenAIIcon from "@/components/icons/OpenAIIcon";
+import AnthropicIcon from "@/components/icons/AnthropicIcon";
+import GoogleIcon from "@/components/icons/GoogleIcon";
 
-export default function AssistantMessage({ content }: { content: string }) {
+function ProviderIcon({ provider, size }: { provider?: string; size: number }) {
+  if (provider === "anthropic") return <AnthropicIcon size={size} />;
+  if (provider === "google") return <GoogleIcon size={size} />;
+  return <OpenAIIcon size={size} />;
+}
+
+export default function AssistantMessage({
+  content,
+  provider,
+}: {
+  content: string;
+  provider?: string;
+}) {
   return (
     <div className={styles.assistantMessage}>
       <div className={styles.icon}>
-        <OpenAIIcon size={18} />
+        <ProviderIcon provider={provider} size={18} />
       </div>
       {content ? (
-        <div
-          className={styles.content}
-          dangerouslySetInnerHTML={{ __html: content }}
-        ></div>
+        <Streamdown className={styles.content}>{content}</Streamdown>
       ) : (
         <p className={styles.loading}>Thinking...</p>
       )}

@@ -1,34 +1,113 @@
 .ChatBox {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     background-color: var(--color-element-background-dark);
-    min-height: 54px;
     border: 1px solid var(--color-border);
-    padding: 0px 5px 0px 5px;
     box-shadow: 0px -5px 15px 0px rgba(9, 5, 8, 0.174);
 
-    &.error {
-        border: 1px solid var(--color-error);
+    .errorBanner {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px 8px 14px;
+        border-bottom: 1px solid var(--color-error-light);
+        background-color: var(--color-error-transparent);
+    }
+
+    .errorMessage {
+        flex: 1;
+        font-size: var(--font-size-xs);
+        line-height: var(--line-height-xs);
+        color: var(--color-error);
+        word-break: break-word;
+    }
+
+    .errorDismiss {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: transparent;
+        border: none;
+        color: var(--color-error);
+        opacity: 0.7;
+        cursor: pointer;
+        padding: 2px;
+        border-radius: var(--radius-m);
+
+        &:hover {
+            opacity: 1;
+        }
     }
 
     textarea {
         flex: 1;
-        padding: 10px 15px;
-        height: 54px;
+        padding: 12px 15px 6px;
+        min-height: 46px;
         border: none;
         background-color: transparent;
-        color: var(--color-text);
+        color: var(--color-font);
         font-size: var(--font-size-s);
         line-height: var(--line-height-s);
         outline: none;
-        border: none;
         resize: none;
+        font-family: inherit;
+    }
+
+    .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 4px 5px 6px;
+        min-height: 34px;
+    }
+
+    .modelPickerWrapper {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        border-radius: var(--radius-m);
+
+        &:hover .modelPickerLabel {
+            background-color: var(--color-element-background-light);
+            color: var(--color-font);
+        }
+    }
+
+    .modelPickerLabel {
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        padding: 4px 6px;
+        color: var(--color-font-light);
+        font-size: var(--font-size-xs);
+        line-height: var(--line-height-xs);
+        font-weight: var(--font-weight-semibold);
+        border-radius: var(--radius-m);
+        white-space: nowrap;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .modelPickerSelect {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+        width: 100%;
+
+        option,
+        optgroup {
+            background-color: var(--color-element-background-dark);
+            color: var(--color-font);
+            font-size: 13px;
+        }
     }
 
     .sendButton {
         display: flex;
-        width: 38px;
-        height: 54px;
+        width: 32px;
+        height: 32px;
         justify-content: center;
         align-items: center;
         border-radius: var(--radius-m);
@@ -36,6 +115,7 @@
         color: var(--color-font-light);
         outline: none;
         border: none;
+        flex-shrink: 0;
 
         &.active {
             color: var(--color-font);
@@ -43,6 +123,7 @@
 
         &:hover {
             cursor: pointer;
+            background-color: var(--color-element-background-light);
         }
     }
 }
